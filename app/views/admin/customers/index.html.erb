@@ -1,0 +1,17 @@
+<h1>会員一覧</h1>
+<% @customers.each do |customer| %>
+  <div class="card mb-4 shadow-sm">
+    <div class="card-body">
+      <h5 class="card-title">会員id:<%= customer.id %></h5>
+      <p class="card-text">氏名：<%= customer.last_name %><%= customer.first_name %></p>
+      <p class="card-text">email:<%= customer.email %></p>
+      <p class="card-text">退会ステータス:
+      <% if customer.is_deleted == false %>
+        有効</p>
+      <% else %>
+        退会済</p>
+      <%end%>
+
+    </div>
+  </div>
+<% end %>

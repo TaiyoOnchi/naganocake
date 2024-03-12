@@ -1,0 +1,28 @@
+<% if @genre.errors.any? %>
+	<h3><%= @genre.errors.count %> errors occurred</h3>
+	<ul>
+    <% @genre.errors.full_messages.each do |message| %>
+				<li><%= message %></li>
+		<% end %>
+	</ul>
+<% end %>
+
+<h1>ジャンル一覧</h1>
+<div>
+  <%= flash[:success] %>
+</div>
+<%= form_with model: @genre ,url: admin_genres_path do |f| %>
+
+  <p>ジャンル名：<%= f.text_field :name ,autofocus: true,placeholder:"ジャンル名"%></p>
+
+  <br></br>
+  <%= f.submit '追加' %>
+
+<% end %>
+
+
+
+<% @genres.each do |genre| %>
+    <p>ジャンル名：<%= genre.name %><p>
+    <p><%= link_to "編集する", edit_admin_genre_path(genre.id)%></p>
+<% end %>

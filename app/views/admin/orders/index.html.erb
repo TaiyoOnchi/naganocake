@@ -1,0 +1,10 @@
+<h1>管理者#注文一覧</h1>
+<% @orders.each do |order| %>
+  <p>注文日時：<%= link_to order.created_at.in_time_zone("Asia/Tokyo").strftime("%Y年%m月%d日 %H:%M:%S %Z"), admin_order_path(order.id) %></p>
+  <p>注文者名：<%=order.customer.last_name + " " + order.customer.first_name%></p>
+  <p>注文個数：<%= OrderDetail.total_quantity_for_order(order) %></p>
+  
+
+  <p>注文ステータス：<%= order.status_i18n%></p>
+  <p>----------------------------------------------------------------------------</p>
+<%end%>

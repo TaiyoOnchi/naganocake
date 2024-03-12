@@ -1,0 +1,26 @@
+<%= render 'admin/shared/error_messages', resource: @item %><!--部分テンプレートファイル-->
+
+<h1>商品登録</h1>
+<%= form_with model: @item ,url: admin_items_path do |f| %>
+  <p><%= f.file_field :image, placeholder: "商品画像", accept: "image/*" %></p>
+  <p><%= f.text_field :name ,autofocus: true, placeholder:"タイトル"%></p>
+  <p><%= f.text_field :introduction ,autofocus: true,placeholder:"説明文"%></p>
+
+  <div class ="genre_field">
+    <p><%= f.collection_select :genre_id, @genre, :id, :name, prompt: "ジャンル名" %></p>
+  </div>
+
+  <p><%= f.text_field :price ,autofocus: true, placeholder:"値段"%></p>
+
+  <div class="is_deleted_field">
+    <p>販売ステータス
+      <%= f.radio_button :is_deleted, "false" %> <%= label_tag "販売中" %>
+      <%= f.radio_button :is_deleted, "true" %> <%= label_tag "販売停止中" %>
+    </p>
+  </div>
+
+  <br></br>
+
+  <%= f.submit '追加' %>
+
+<% end %>

@@ -1,0 +1,29 @@
+<h1>配送先一覧</h1>
+<% if @address.errors.any? %> 
+	<h3><%= @address.errors.count %> errors occurred</h3>
+	<ul>
+    <% @address.errors.full_messages.each do |message| %> 
+				<li><%= message %></li>　
+		<% end %>
+	</ul>
+<% end %>
+
+<%if @addresses.present?%>
+    <% @addresses.each do |address| %>
+        <p>郵便番号：<%= address.postal_code %></p>
+        <p>住所：<%= address.address %></p>
+        <p>宛名：<%= address.name %></p>
+        <p><%= link_to "編集", edit_addresses_path(address.id) %></p>
+        <p><%= link_to "削除", delete_addresses_path(address.id), method: :delete, "data-confirm" => "本当に削除しますか？"%></p>
+    <%end%>
+<%else%>
+    <p>配送先未登録</p>
+<%end%>
+
+<h3>新規登録</h3>
+<%= form_with model: @address ,url: create_addresses_path do |f| %>
+  <p><%= f.text_field :postal_code ,autofocus: true,placeholder:"郵便番号"%></p>
+  <p><%= f.text_field :address ,autofocus: true,placeholder:"住所"%></p>
+  <p><%= f.text_field :name ,autofocus: true, placeholder:"宛名"%></p>
+  <%= f.submit '追加' %>
+<% end %>

@@ -1,0 +1,31 @@
+<h1>管理者#注文詳細</h1>
+<h3><%= flash[:notice] %></h3>
+<p>購入者：<%= @order.customer.last_name + " " + @order.customer.first_name %></p>
+<p>配送先：<%= '〒' + @order.postal_code + " " + @order.address + " " + @order.name %></p>
+<p><%= @order.method_i18n %></p>
+
+
+<%= form_with model: @order ,url: admin_order_path(@order.id), method: :patch do |f| %>
+  注文ステータス：
+  <%= f.select :status, Order.statuses_i18n.invert %>
+  <%#= f.select :status,Order.statuses_i18n.keys.map{|k| [I18n.t("enums.order.status.#{k}"), k]} %>
+	<%= f.submit '更新' %>
+<% end %>
+
+<h3>注文商品</h3>
+<% @order.order_details.each do |order_detail| %>
+  <p>商品名：<%= order_detail.item.name %></p>
+  <p>値段(購入時)：<%=order_detail.price%></p>
+  <p>個数：<%=order_detail.quantity%></p>
+  <%= form_with model: order_detail ,url: admin_order_detail_path(order_detail.id), method: :patch do |f| %>
+    製作ステータス：
+    <%= f.select :status,OrderDetail.statuses_i18n.invert %>
+  	<%= f.submit '更新' %>
+  <% end %>
+  <p>--------------------------------------------</p>
+<%end%>
+
+<h5>商品合計：<%= @total_amount %></h5>
+<h5>送料：<%=@order.postage%></h5>
+<h5>請求金額：<%=@order.amount%></h5>
+

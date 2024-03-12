@@ -1,0 +1,22 @@
+<% if @genre.errors.any? %> 
+	<h3><%= @genre.errors.count %> errors occurred</h3>
+	<ul>
+    <% @genre.errors.full_messages.each do |message| %> 
+				<li><%= message %></li>　
+		<% end %>
+	</ul>
+<% end %>
+
+<h1>ジャンル編集</h1>
+<div>
+  <%= flash[:success] %>
+</div>
+<%= form_with model: @genre,url: admin_genre_path(@genre.id) do |f| %>
+  
+  <p>ジャンル名：<%= f.text_field :name ,autofocus: true,placeholder:"ジャンル名"%></p>
+  
+  <br></br>
+  <%= f.submit '編集' %>
+  
+<% end %>
+
