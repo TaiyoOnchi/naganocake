@@ -11,7 +11,7 @@ class Admin::GenresController < ApplicationController
     @genre = Genre.new(genre_params)
     if @genre.save
       flash[:success] = "投稿成功"
-      redirect_to admin_genres_path(@genre.id)
+      redirect_to admin_genres_path
     else
       @genres=Genre.all
       render :new
