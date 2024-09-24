@@ -1,16 +1,24 @@
-<h1>商品詳細</h1>
-<p><%= image_tag @item.get_item_image(100,100) %></p>
-<p>商品名:<%= @item.name %></p>
-<p>商品説明:<%= @item.introduction %></p>
-<p>税込価格:<%= @item.with_tax_price %></p>
+<h3 class="text-center my-5">商品詳細</h3>
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="text-center">
+        <%= image_tag @item.get_item_image(400,400), class: "img-fluid rounded shadow-sm" %>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <h2 class="mb-4 font-weight-bold"><%= @item.name %></h2>
+      <p class="lead"><%= @item.introduction %></p>
+      <h4 class="text-primary">税込価格: <%= @item.with_tax_price %>円</h4>
 
-<%= form_with model: @cart_item , url: create_cart_items_path, method: :post do |f| %>
-    <p>
-        <%= f.hidden_field :item_id, value: @item.id %>
-    </p>
-    <p>
-        <%= f.label :amount, "個数" %>
-        <%= f.select :amount, 1..10 %>
-    </p>
-    <p><%= f.submit 'カート追加' %></p>
-<%end%>
+      <%= form_with model: @cart_item, url: cart_items_path, method: :post, local: true do |f| %>
+        <div class="form-group mt-4">
+          <%= f.hidden_field :item_id, value: @item.id %>
+          <%= f.label :amount, "個数", class: "form-label" %>
+          <%= f.select :amount, 1..10, {}, class: "form-control w-50" %>
+        </div>
+        <%= f.submit 'カートに追加', class: "btn btn-lg btn-primary mt-3 shadow-sm" %>
+      <% end %>
+    </div>
+  </div>
+</div>

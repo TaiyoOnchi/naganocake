@@ -1,5 +1,9 @@
-<h1>Top page</h1>
-<div>
-  <%= flash[:success_logout] %>
+<div class="container mt-4">
+  <h1 class="text-center">Top Page</h1>
+  <% if flash[:success_logout] %>
+    <div class="alert alert-success text-center">
+      <%= flash[:success_logout] %>
+    </div>
+  <% end %>
 </div>
 

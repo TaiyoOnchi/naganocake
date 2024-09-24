@@ -1,18 +1,19 @@
-<h1>注文確認画面</h1>
-<%= form_with model: @order ,url: create_orders_path, method: :post do |f| %>
-    <%= f.hidden_field :customer_id, :value => current_customer.id %>
-    <%= f.hidden_field :postal_code, :value => @order.postal_code %>
-    <%= f.hidden_field :address, :value => @order.address %>
-    <%= f.hidden_field :name, :value => @order.name %>
-    <%= f.hidden_field :method, :value => @order.method %>
-    <%= f.hidden_field :amount, :value => @order.amount %>
-    <%= f.hidden_field :status, :value => "waiting_for_payment" %>
-    <%= f.hidden_field :postage, :value => @order.postage %>
+<div class="container mt-4">
+  <h1 class="text-center">注文確認画面</h1>
 
-  <div class="container">
-  	<div class="row">
-  		<div class="col-md-8">
-  		  <table class="table">
+  <%= form_with model: @order, url: orders_path, method: :post do |f| %>
+    <%= f.hidden_field :customer_id, value: current_customer.id %>
+    <%= f.hidden_field :postal_code, value: @order.postal_code %>
+    <%= f.hidden_field :address, value: @order.address %>
+    <%= f.hidden_field :name, value: @order.name %>
+    <%= f.hidden_field :method, value: @order.method %>
+    <%= f.hidden_field :amount, value: @order.amount %>
+    <%= f.hidden_field :status, value: "waiting_for_payment" %>
+    <%= f.hidden_field :postage, value: @order.postage %>
+
+    <div class="row">
+      <div class="col-md-8">
+        <table class="table table-bordered">
           <thead>
             <tr>
               <th scope="col">商品名</th>
@@ -25,20 +26,17 @@
             <% @cart_items.each do |cart_item| %>
               <tr>
                 <th scope="row"><%= cart_item.item.name %></th>
-                <td><%=cart_item.item.price%></td>
-                <td><%=cart_item.amount%></td>
-                <td><%=cart_item.subtotal%></td>
+                <td><%= cart_item.item.price %></td>
+                <td><%= cart_item.amount %></td>
+                <td><%= cart_item.subtotal %></td>
               </tr>
-            <%end%>
+            <% end %>
           </tbody>
         </table>
-  		</div>
-  		
-  		
-  		<div class="col-md-4">
-  		  <table class="table">
-          <thead>
-          </thead>
+      </div>
+
+      <div class="col-md-4">
+        <table class="table table-bordered">
           <tbody>
             <tr>
               <th scope="row">送料</th>
@@ -54,19 +52,17 @@
             </tr>
           </tbody>
         </table>
-  		</div>
-  		
-  	</div>
-  </div>
-  
-  <h5>支払方法</h5>
-  <p><%= @order.method_i18n %></p>
-  
-  <h5>お届け先</h5>
-  <p><%= '〒' + @order.postal_code + " " + @order.address + " " + @order.name %></p>
-  
-  
+      </div>
+    </div>
 
-  <%= f.submit '注文を確定する' ,data: { confirm: "送信してもいいですか？？" } %>
-<%end%>
+    <h5>支払方法</h5>
+    <p><%= @order.method_i18n %></p>
 
+    <h5>お届け先</h5>
+    <p><%= '〒' + @order.postal_code + " " + @order.address + " " + @order.name %></p>
+
+    <div class="text-center">
+      <%= f.submit '注文を確定する', data: { confirm: "送信してもいいですか？" }, class: "btn btn-success" %>
+    </div>
+  <% end %>
+</div>

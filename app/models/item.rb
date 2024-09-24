@@ -7,7 +7,7 @@ class Item < ApplicationRecord
   validates :genre_id, presence: true
   validates :name, presence: true
   validates :introduction, presence: true
-  validates :price, presence: true
+  validates :price, numericality: { only_integer: true, greater_than: 0, message: "は0以上の数値を入力してください" }
 
 
   def get_item_image(width, height)

@@ -8,6 +8,70 @@
 
     <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+    <!-- Font Awesome 読み込み -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+      /* ナビゲーションリンク */
+      .navbar-nav {
+        display: flex;
+        flex-wrap: nowrap;
+      }
+
+      .navbar-nav .nav-item .nav-link {
+        color: #fff;
+        padding: 10px 7px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        white-space: nowrap;  /* 改行を防ぐ */
+      }
+
+      /* ホバー時エフェクト */
+      .navbar-nav .nav-item .nav-link:hover {
+        background-color: #008b8b;
+        color: #fff;
+        border-radius: 5px;
+      }
+
+      /* 検索ボックス */
+      .search-form input[type="text"] {
+        border: 1px solid #ccc;
+        padding: 5px;
+        border-radius: 5px;
+      }
+
+      /* 検索ボタン */
+      .search-form button {
+        background-color: #ff6347;
+        border: none;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .navbar-brand {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #ff6347;
+        transition: color 0.3s ease;
+      }
+
+      .navbar-brand:hover {
+        color: #fff;
+      }
+
+      /* Admin の場合の検索フォームの幅 */
+      .admin-search-form {
+        flex-grow: 1;  /* 検索フォームが他の要素を押しのけるように横幅を広げる */
+        max-width: 500px;  /* 必要に応じて最大幅を設定 */
+      }
+
+      /* 通常の検索フォームの幅 */
+      .search-form {
+        max-width: 300px; /* デフォルトの検索フォームの最大幅 */
+      }
+    </style>
   </head>
 
   <body class="d-flex flex-column vh-100">
@@ -21,50 +85,50 @@
           <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav ml-auto">
               <% if admin_signed_in? %>
-                <%= form_with url: admin_items_path, method: :get do |f| %>
-                  <%= text_field_tag :word, params[:word], placeholder: "商品名で検索" %>
-                  <%= f.select :search, options_for_select([["完全一致","perfect_match"], ["前方一致","forward_match"],  ["後方一致","backward_match"], ["部分一致","partial_match"]]) %>
+                <!-- Admin ログイン時にクラスを付与 -->
+                <%= form_with url: admin_items_path, method: :get, class: 'search-form admin-search-form d-flex align-items-center mr-3' do |f| %>
+                  <%= text_field_tag :word, params[:word], placeholder: "商品名で検索", class: "form-control mr-2" %>
+                  <%= f.select :search, options_for_select([["完全一致","perfect_match"], ["前方一致","forward_match"],  ["後方一致","backward_match"], ["部分一致","partial_match"]]), {}, class: "form-control mr-2" %>
                   <%= f.submit "検索", class: "btn btn-primary" %>
                 <% end %>
                 <li class="nav-item">
-                  <%= link_to '商品一覧', admin_items_path%>
+                  <%= link_to '<i class="fas fa-box"></i> 商品一覧'.html_safe, admin_items_path, class: 'nav-link' %>
                 </li>
                 <li class="nav-item">
-                  <%= link_to ' 会員一覧 ', admin_customers_path %>
+                  <%= link_to '<i class="fas fa-users"></i> 会員一覧'.html_safe, admin_customers_path, class: 'nav-link' %>
                 </li>
                 <li class="nav-item">
-                  </i><%= link_to ' 注文履歴一覧 ', admin_orders_path %>
+                  <%= link_to '<i class="fas fa-receipt"></i> 注文履歴一覧'.html_safe, admin_orders_path, class: 'nav-link' %>
                 </li>
                 <li class="nav-item">
-                  </i><%= link_to ' ジャンル一覧 ', admin_genres_path %>
+                  <%= link_to '<i class="fas fa-tags"></i> ジャンル一覧'.html_safe, admin_genres_path, class: 'nav-link' %>
                 </li>
                 <li class="nav-item">
-                  </i><%= link_to " ログアウト ", destroy_admin_session_path, method: :delete %>
+                  <%= link_to '<i class="fas fa-sign-out-alt"></i> ログアウト'.html_safe, destroy_admin_session_path, method: :delete, class: 'nav-link' %>
                 </li>
               <% else %>
                 <% if customer_signed_in? %>
-                
                 <li class="nav-item">
-                  <%= link_to 'マイページ', my_page_path%>
+                  <%= link_to '<i class="fas fa-user"></i> マイページ'.html_safe, my_page_path, class: 'nav-link'%>
                 </li>
                 <li class="nav-item">
-                  <%= link_to ' 商品一覧 ', items_path %>
+                  <%= link_to '<i class="fas fa-box"></i> 商品一覧'.html_safe, items_path, class: 'nav-link' %>
                 </li>
                 <li class="nav-item">
-                  </i><%= link_to ' カート ', cart_items_path %>
+                  <%= link_to '<i class="fas fa-shopping-cart"></i> カート'.html_safe, cart_items_path, class: 'nav-link' %>
                 </li>
                 <li class="nav-item">
-                  </i><%= link_to " ログアウト ", destroy_customer_session_path, method: :delete %>
+                  <%= link_to '<i class="fas fa-sign-out-alt"></i> ログアウト'.html_safe, destroy_customer_session_path, method: :delete, class: 'nav-link' %>
                 </li>
                 <% else %>
                 <li class="nav-item">
-                  <%= link_to '商品一覧', items_path%>
+                  <%= link_to '<i class="fas fa-box"></i> 商品一覧'.html_safe, items_path, class: 'nav-link'%>
                 </li>
                 <li class="nav-item">
-                  <%= link_to " 新規登録 ", new_customer_registration_path %>
+                  <%= link_to '<i class="fas fa-user-plus"></i> 新規登録'.html_safe, new_customer_registration_path, class: 'nav-link' %>
                 </li>
                 <li class="nav-item">
-                  <%= link_to " ログイン ", new_customer_session_path %>
+                  <%= link_to '<i class="fas fa-sign-in-alt"></i> ログイン'.html_safe, new_customer_session_path, class: 'nav-link' %>
                 </li>
                 <% end %>
               <% end %>
@@ -73,8 +137,9 @@
         </div>
       </nav>
     </header>
+
     <main class="mb-auto">
-    <%= yield %>
+      <%= yield %>
     </main>
   </body>
 </html>

@@ -1,31 +1,62 @@
-<h1>管理者#注文詳細</h1>
-<h3><%= flash[:notice] %></h3>
-<p>購入者：<%= @order.customer.last_name + " " + @order.customer.first_name %></p>
-<p>配送先：<%= '〒' + @order.postal_code + " " + @order.address + " " + @order.name %></p>
-<p><%= @order.method_i18n %></p>
+<!-- 管理者の注文詳細ページ -->
+<h1 class="my-4 text-center">管理者 #注文詳細</h1>
+<h3 class="text-success text-center"><%= flash[:notice] %></h3>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="mb-4">
+        <p><strong>購入者：</strong> 
+          <%= "#{@order.customer.last_name} #{@order.customer.first_name}" %>
+        </p>
+        <p><strong>配送先：</strong> 
+          〒<%= "#{@order.postal_code} #{@order.address} #{@order.name}" %>
+        </p>
+        <p><strong>支払方法：</strong> <%= @order.method_i18n %></p>
+      </div>
+
+ 
+      <div class="mb-4">
+        <h4>注文ステータス更新</h4>
+        <%= form_with model: @order, url: admin_order_path(@order.id), method: :patch do |f| %>
+          <div class="mb-3">
+            <%= f.label :status, "注文ステータス", class: "form-label" %>
+            <%= f.select :status, Order.statuses_i18n.invert, { prompt: "ステータスを選択" }, class: "form-select" %>
+          </div>
+          <%= f.submit '更新', class: "btn btn-primary w-100" %>
+        <% end %>
+      </div>
+    </div>
+
+ 
+    <div class="col-md-9">
+      <h3>注文商品</h3>
+      <% @order.order_details.each do |order_detail| %>
+        <div class="card mb-3">
+          <div class="card-body">
+            <p><strong>商品名：</strong> <%= order_detail.item.name %></p>
+            <p><strong>値段(購入時)：</strong> <%= number_to_currency(order_detail.price) %></p>
+            <p><strong>個数：</strong> <%= order_detail.quantity %></p>
+
+            <h5>製作ステータス更新</h5>
+            <%= form_with model: order_detail, url: admin_order_detail_path(order_detail.id), method: :patch do |f| %>
+              <div class="mb-3">
+                <%= f.label :status, "製作ステータス", class: "form-label" %>
+                <%= f.select :status, OrderDetail.statuses_i18n.invert, { prompt: "ステータスを選択" }, class: "form-select" %>
+              </div>
+              <%= f.submit '更新', class: "btn btn-primary" %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
 
 
-<%= form_with model: @order ,url: admin_order_path(@order.id), method: :patch do |f| %>
-  注文ステータス：
-  <%= f.select :status, Order.statuses_i18n.invert %>
-  <%#= f.select :status,Order.statuses_i18n.keys.map{|k| [I18n.t("enums.order.status.#{k}"), k]} %>
-	<%= f.submit '更新' %>
-<% end %>
-
-<h3>注文商品</h3>
-<% @order.order_details.each do |order_detail| %>
-  <p>商品名：<%= order_detail.item.name %></p>
-  <p>値段(購入時)：<%=order_detail.price%></p>
-  <p>個数：<%=order_detail.quantity%></p>
-  <%= form_with model: order_detail ,url: admin_order_detail_path(order_detail.id), method: :patch do |f| %>
-    製作ステータス：
-    <%= f.select :status,OrderDetail.statuses_i18n.invert %>
-  	<%= f.submit '更新' %>
-  <% end %>
-  <p>--------------------------------------------</p>
-<%end%>
-
-<h5>商品合計：<%= @total_amount %></h5>
-<h5>送料：<%=@order.postage%></h5>
-<h5>請求金額：<%=@order.amount%></h5>
-
+      <hr />
+      <div>
+        <h5>商品合計：<%= number_to_currency(@total_amount) %></h5>
+        <h5>送料：<%= number_to_currency(@order.postage) %></h5>
+        <h5>請求金額：<%= number_to_currency(@order.amount) %></h5>
+      </div>
+    </div>
+  </div>
+</div>

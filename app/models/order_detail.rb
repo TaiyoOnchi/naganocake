@@ -13,4 +13,8 @@ class OrderDetail < ApplicationRecord
   def self.total_quantity_for_order(order) #クラスメソッド(インスタンスを生成せずに呼び出すことができる)
     where(order_id: order.id).sum(:quantity) # 引数として受け取ったorderのidとorder_idカラムが一致するorder_detailモデルの:quantityをすべて
   end
+  
+  def subtotal
+    item.with_tax_price * quantity
+  end
 end
