@@ -21,4 +21,14 @@ class Item < ApplicationRecord
   def with_tax_price
     (price * 1.1).floor
   end
+  
+  def self.recommended
+    recommends = []
+    active_genres = Genre.only_active.includes(:items)
+    active_genres.each do |genre|
+      item = genre.items.last
+      recommends << item if item
+    end
+    recommends
+  end
 end

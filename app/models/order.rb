@@ -13,4 +13,6 @@ class Order < ApplicationRecord
 
   enum method: { credit_card: 0, transfer: 1 }
   enum status: { waiting_for_payment: 0, payment_confirmed: 1, in_production: 2, preparing_to_ship: 3, shipped: 4}
+  # 本日の注文を取得(0時でリセット)
+  scope :ordered_today, -> { where(created_at: Time.current.at_beginning_of_day..Time.current.at_end_of_day) }
 end
